@@ -54,15 +54,3 @@ class Algorithm:
         if sum([i["quantity"] for i in self.transactions[self.active_pos_iter:]]) == 0:
             self.active_pose_iter = self.active_pos_iter_end
         self.active_pos_iter_end = len(self.transactions)
-
-A = Algorithm([1,1,1,1,1,1],[10,9,8,10,6,3],[[1],[2],[1],[2],[1],[2]])
-A.start()
-#цена падает - только лонг
-#цена падает - только шорт
-#цена растет - только шорт
-#цена падает - лонг и шорт
-#цена растет - лонг и шорт
-#def Test(argument):
-  #  output = [0]
-  #  for i in range(1,len(arguments)):
-      #  output.append()
