@@ -1,6 +1,34 @@
 import pandas as pd
 import numpy as np
-class Algorithm:
+
+def Segmentate(data, granule):
+    
+    time = pd.to_datetime(data["<TIME>"],format = "%H%M%S")
+    new_dataFrame = ({'<TIME>':[],'<OPEN>':[],'<HIGH>':[],'<LOW>':[],'<CLOSE>':[],'<VOL>':[]})
+   # print("a")
+    i = 0
+    td = pd.Timedelta(str(granule) + ' seconds')
+    
+   # print(td)
+    while i < (len(data))-1:
+        #begr = Time.clock()
+        beg = i
+        if time[beg].second%granule != 0:
+            time[beg] = time[beg].replace(second = int(time[beg].second/granule)*granule)
+        while i < (len(data))-1 and time[i+1]-time[beg] < td: #data["<TIME>"].iloc[i]==data["<TIME>"].iloc[i+1]:
+            i+=1
+        #print(Time.clock() - begr)
+        end = i
+        i+=1
+        iterated = data.iloc[beg:end+1]
+        new_dataFrame['<TIME>'].append(time[beg])
+        new_dataFrame['<OPEN>'].append(iterated['<LAST>'].iloc[0])
+        new_dataFrame['<CLOSE>'].append(iterated['<LAST>'].iloc[-1])
+        new_dataFrame['<HIGH>'].append(np.max(iterated['<LAST>'].to_numpy()))
+        new_dataFrame['<LOW>'].append(np.min(iterated['<LAST>'].to_numpy()))
+        new_dataFrame['<VOL>'].append(sum(iterated['<VOL>'].to_numpy()))
+        
+    return pd.DataFrame(new_dataFrame)
     
 class Algorithm:
     def __init__(self, timestamps, prices, features, capital = 100000, leverage = 1, fee = 0):
